@@ -12,7 +12,12 @@ if (isset($_GET['page']) && !empty($_GET["page"])) {
     }
 } 
 else {
-    include 'template/pages/accueil.php';
+    if ($_SESSION['roles'] != 1){
+        include 'template/pages/articles.php';
+    }
+    else{
+        include 'template/pages/admin_article.php';
+    }
 }
 
 

@@ -1,5 +1,6 @@
 <?php
-$sql = $pdo->prepare('SELECT * FROM article join categorie on article.id_categorie=categorie.id_categorie');
+$sql = $pdo->prepare('SELECT * FROM article join categorie on article.id_categorie=categorie.id_categorie
+                    where statut=1');
 $sql->execute();
 $res = $sql->fetchAll(PDO::FETCH_OBJ);
 ?>
@@ -11,7 +12,7 @@ $res = $sql->fetchAll(PDO::FETCH_OBJ);
             <div class="col-sm-12 col-md-6 col-lg-4 mb-5">
                 <div class="card ">
                     <div class="card-body ">
-                        <img class="d-block w-100 mb-2" style="margin: auto" src="<?= img; ?>article.jpg" alt=" Third slide">
+                        <img class="d-block w-100 mb-2 " style="height:200px" src="<?= article.$row->photo ?> " alt=" Third slide">
                         <h6 class="card-title text-center"><?= $row->titre; ?></h6>
                         <h5 class="badge badge-danger"><?= $row->date_article; ?></h5>
                         <h5 class="card-title badge badge-danger"><?= $row->nom; ?></h5>

@@ -1,6 +1,6 @@
 <?php
+
 if (isset($_POST['ajouterArticle'])) {
-    $date = date("Y-m-d");
     $sql = $pdo->prepare("INSERT INTO article (titre,photo,contenu,statut,id_categorie,date_article)
                         VALUES (:titre,:photo,:contenu,:statut,:id_categorie,:date_article)");
     insertChamps($sql, ':titre', $_POST['titre']);
@@ -9,8 +9,8 @@ if (isset($_POST['ajouterArticle'])) {
     insertChamps($sql, ':contenu', $_POST['contenu']);
     insertChamps($sql, ':statut', 0);
     insertChamps($sql, ':id_categorie', $_POST['id_categorie']);
-    insertChamps($sql, ':date_article', $date);
-    $res=$sql->execute();
+    insertChamps($sql, ':date_article', $_POST['date_article']);
+    $res = $sql->execute();
 }
 ?>
 
@@ -27,7 +27,7 @@ if (isset($_POST['ajouterArticle'])) {
         </div>
         <div class="form-group">
             <label for="date_article">Adresse Mail</label>
-            <input type="date" class="form-control" id="date_article" name="date_article" required>
+            <input type="datetime-local" class="form-control" id="date_article" name="date_article" required>
         </div>
         <div class="form-group">
             <label for="photo">Image</label>
@@ -35,7 +35,7 @@ if (isset($_POST['ajouterArticle'])) {
         </div>
         <div class="form-group">
             <label for="contenu">Contenu de l'article</label>
-            <textarea type="password" rows="10" class="form-control" id="contenu" name="contenu" required></textarea>
+            <textarea rows="10" class="form-control" id="contenu" name="contenu" required></textarea>
         </div>
         <div class="form-group">
             <label for="categorie">Catégorie</label>
@@ -63,8 +63,6 @@ if (isset($_POST['ajouterArticle'])) {
 <script>
     let select = document.querySelector('#categorie');
     select.addEventListener('change', () => {
-        document.getElementById('id').value=(select.value);
+        document.getElementById('id').value = (select.value);
     });
-
-
 </script>

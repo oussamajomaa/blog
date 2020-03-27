@@ -1,0 +1,21 @@
+#container{
+    display: none;
+}
+.tr{
+    display: none;
+}
+.th1{
+    width: 15%;
+}
+.th2{
+    width: 40%;
+}
+.th3{
+    width: 15%;
+}
+.th_titre{
+    width: 35%;
+}
+.th_liste{
+    width: 10%;
+}

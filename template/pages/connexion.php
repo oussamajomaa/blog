@@ -10,7 +10,8 @@ if (isset($_POST['submitConnect'])) {
     $sql->execute();
     $res = $sql->fetch(PDO::FETCH_OBJ);
 
-    if (!$res) { ?>
+    if (!$res) { 
+        ?>
         <div class="container col-4">
             <div class="alert alert-danger alert-dismissible fade show col-md-12" role="alert">
                 <strong>
@@ -30,9 +31,11 @@ if (isset($_POST['submitConnect'])) {
         if ($validpasse) {
             $_SESSION['user'] = $res->pseudo;
             $_SESSION['id_utilisateur'] = $res->id_utilisateur;
+            $_SESSION['email'] = $res->email;
+            $_SESSION['photo'] = $res->photo_utilisateur;
             $_SESSION['roles'] = $res->roles;
             
-            header("Location:index.php?page=articles");
+            header("Location:index.php");
         } else { ?>
             <div class="container col-4">
                 <div class="alert alert-danger alert-dismissible fade show col-md-12" role="alert">

@@ -63,6 +63,7 @@ if (isset($_POST['submitInsert'])) {
         </div>
         
 
+
         <!-- <div class="form-group">
             <label for="confirm_mdp">Confirmer le Mot de Passe</label>
             <input type="password" class="form-control" id="confirm_mdp" required>
