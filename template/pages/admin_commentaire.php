@@ -22,9 +22,7 @@ if ($_SESSION) {
                     <thead class="table-info ">
                         <tr>
                             <th class='th_titre '><span class="badge badge-dark"><?= $row->titre; ?></span></th>
-                            <th class="th_liste"></th>
                             <th class="th_titre"><span class="badge badge-dark"><?= $row->nom; ?></span></th>
-                            <th class="th_liste"></th>
                             <th class="th_liste"><a class="allComment badge badge-success" href="#"><i class="fa fa-chevron-down"></i> Liste des Commentaires</a></th>
                         </tr>
 
@@ -44,7 +42,7 @@ if ($_SESSION) {
                         foreach ($re as $ro) {
                         ?>
                             <tr class="tr">
-                                <td colspan="5">
+                                <td colspan="3">
                                     <div class="row d-flex align-items-center btn btn-dark m-1">
                                         <div class="col-12  col-md-1 text-left">
                                             <p class="badge badge-dark"><?= $ro->pseudo; ?></p>
@@ -85,9 +83,10 @@ if ($_SESSION) {
     for (let i = 0; i < allComment.length; i++) {
 
         allComment[i].addEventListener('click', () => {
+            allComment[i].re
             let tr = allComment[i].parentElement.parentElement.parentElement.parentElement.querySelectorAll('.tr');
             console.log(tr)
-            $(tr).toggle();
+            $(tr).toggle('100');
         })
     }
 </script>

@@ -1,73 +1,93 @@
 <?php
-// $target_dir = "/var/www/html/blogPHP/assets/img/user/";
-// $target_file = $target_dir . basename($_FILES["fileToUpload"]["name"]);
-// $uploadOk = 1;
-// $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
-// var_dump($imageFileType);
-// var_dump($target_dir);
-// var_dump($target_file);
-// // Check if image file is a actual image or fake image
-// if (isset($_POST["submit"])) {
-//     $check = getimagesize($_FILES["fileToUpload"]["tmp_name"]);
-//     if ($check !== false) {
-//         echo "File is an image - " . $check["mime"] . ".";
-//         $uploadOk = 1;
-//     } else {
-//         echo "File is not an image.";
-//         $uploadOk = 0;
-//     }
-// }
-// // Check if file already exists
-// if (file_exists($target_file)) {
-//     echo "Sorry, file already exists.";
-//     $uploadOk = 0;
-// }
-// // Check file size
-// if ($_FILES["fileToUpload"]["size"] > 500000) {
-//     echo "Sorry, your file is too large.";
-//     $uploadOk = 0;
-// }
-// // Allow certain file formats
-// if (
-//     $imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
-//     && $imageFileType != "gif"
-// ) {
-//     echo "Sorry, only JPG, JPEG, PNG & GIF files are allowed.";
-//     $uploadOk = 0;
-// }
-// // Check if $uploadOk is set to 0 by an error
-// if ($uploadOk == 0) {
-//     echo "Sorry, your file was not uploaded.";
-//     // if everything is ok, try to upload file
-// } else {
-//     if (move_uploaded_file($_FILES["fileToUpload"]["tmp_name"], $target_file)) {
-//         echo "The file " . basename($_FILES["fileToUpload"]["name"]) . " has been uploaded.";
-//     } else {
-//         echo "Sorry, there was an error uploading your file.";
-//     }
-// }
+if ($_SESSION){
+    if (isset($_POST['submit'])){
+        $file=$_FILES['file'];
+        $fileName = $_FILES['file']['name'];
+        $fileTmpName = $_FILES['file']['tmp_name'];
+        $fileSize = $_FILES['file']['size'];
+        $fileType = $_FILES['file']['type'];
+        $fileError = $_FILES['file']['error'];
+
+        // explode retourne un tableau associatif de deux élément après avoir couper le nom du fichier en deux morceaux:
+        //le nom et l'extention 
+        $fileExt=explode('.', $fileName);
+
+        // Retourne une chaîne en minuscule. Ici la chaine cible c'est le deuxième élément du tableau associatif (extention)
+        $fileActualExt=strtolower(end($fileExt));
+        
+        //tableau des extentions autorisées 
+        $allowed=array('jpg','jpeg','png');
+
+        if (in_array($fileActualExt, $allowed)){
+            if ($fileError === 0){
+                if ($fileSize <1000000){
+                    $fileNameNew = $_SESSION['id_utilisateur'].".". $fileActualExt;
+                    $fileDestination= user.$fileNameNew;
+                    var_dump($fileDestination);
+                    var_dump($fileTmpName);
+
+                    //il faut d'abord changer la permission dans le dossier distination: $ chomd 777 nom_dossier
+                    if (move_uploaded_file($fileTmpName, $fileDestination)){
+                        echo 'file uploaded';
+                        $photo_utilisateur= $fileNameNew;
+                        $id_utilisateur=$_SESSION['id_utilisateur'];
+                        $sql=$pdo->prepare('UPDATE utilisateur set photo_utilisateur=:photo_utilisateur
+                                            where id_utilisateur= :id_utilisateur');
+                        insertChamps($sql, ':photo_utilisateur', $photo_utilisateur);
+                        insertChamps($sql, ':id_utilisateur', $id_utilisateur);
+                        $res=$sql->execute();
+                        if ($res){
+                            echo 'la photo a été enregistré';
+                        }
+                        else{
+                            echo "la photo n'a pas été enregistré";
+                        }
+                    }
+                    else{
+                        echo 'file is not uploaded';
+                    }  
+                }
+                else{
+                    echo "Le fichier est trop gros ";
+                }
+
+            }
+            else{
+                echo "Il y a eu une erreur en téléchargant ce type de fichier";
+            }
+        }
+        else{
+            echo "Vous ne pouvez pas télécharger ce type de fichier";
+        }
+    }
 ?>
 
 
-<div class="container mt-5">
-    <div class="row">
-        <div class="col-3">
-            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <a class="nav-link active " id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Votre photo</a>
-                <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Changer le mot de passe</a>
-            </div>
-        </div>
-        <div class="col-9">
-            <div class="tab-content" id="v-pills-tabContent">
-                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
-                    <form action="#" method="post" enctype="multipart/form-data">
-                        Select image to upload:
-                        <input type="file" name="fileToUpload" id="fileToUpload">
-                        <input type="submit" value="Upload Image" name="submit">
-                    </form>
+    <div class="container mt-5">
+        <div class="row">
+            <div class="col-3">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active " id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Votre photo</a>
+                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Changer le mot de passe</a>
                 </div>
-                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">...</div>
+            </div>
+            <div class="col-9">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+                        <form action="#" method="post" enctype="multipart/form-data">
+                            Select image to upload:
+                            <input type="file" name="file" id="fileToUpload">
+                            <input type="submit" value="Télécharger l'image" name="submit">
+                        </form>
+                    </div>
+                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">...</div>
+                </div>
             </div>
         </div>
     </div>
-</div>
+<?php
+} 
+else {
+    header('location:index.php?page=articles');
+}
+?>

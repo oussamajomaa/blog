@@ -31,6 +31,20 @@ if ((isset($_POST['categorieModif'])) && (isset($_GET['id_categorie1']))) {
     header('location: index.php?page=admin_categorie');
 }
 
+if ((!empty($_GET['id_utilisateur'])) && (isset($_GET['id_utilisateur']))){
+    $id_utilisateur=$_GET['id_utilisateur'];
+    
+
+    $sql = $pdo->prepare('DELETE from commentaire where id_utilisateur=:id_utilisateur');
+    insertChamps($sql, ':id_utilisateur', $id_utilisateur);
+    $sql->execute();
+
+    $sql = $pdo->prepare('DELETE from utilisateur where id_utilisateur=:id_utilisateur');
+    insertChamps($sql, ':id_utilisateur', $id_utilisateur);
+    $sql->execute();
+    header('location: index.php?page=admin_user');
+}
+
 
 
 ?>
