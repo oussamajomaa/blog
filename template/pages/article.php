@@ -27,7 +27,7 @@ $res = $sql->fetch(PDO::FETCH_OBJ);
 $sql2 = $pdo->prepare('SELECT * from commentaire
                         join article on commentaire.id_article=article.id_article
                         join utilisateur on commentaire.id_utilisateur=utilisateur.id_utilisateur
-                        and commentaire.id_article=:id_article');
+                        and commentaire.id_article=:id_article order by date_comm desc');
 
 insertChamps($sql2, ':id_article', $_GET['id']);
 $sql2->execute();
@@ -39,7 +39,7 @@ $res2 = $sql2->fetchAll(PDO::FETCH_OBJ);
         <div class="card ">
             <div class="card-body ">
                 <h1 class="card-title text-center"><?= $res->titre; ?></h1>
-                <img class="d-block w-100 mb-2" src="<?= article . $res->photo ?>" alt=" Third slide">
+                <img class="d-block w-100 mb-2 " src="<?= article . $res->photo ?>" alt=" Third slide">
                 <h5 class="badge badge-danger"><?= $res->date_article; ?></h5>
                 <h5 class="badge badge-danger"><?= $res->nom; ?></h5>
                 <div class="dropdown-divider"></div>
@@ -72,7 +72,7 @@ $res2 = $sql2->fetchAll(PDO::FETCH_OBJ);
                         <div class="col-12  col-md-1 text-left">
                             <p class="badge badge-dark"><?= $row->pseudo; ?></p>
                             <div>
-                                <img style="width: 50px" src="<?= user . $row->photo_utilisateur; ?>" alt="">
+                                <img style="width: 50px; height:50px" class="rounded-circle" src="<?= user . $row->photo_utilisateur; ?>" alt="">
                             </div>
                         </div>
                         <div class="col-12  col-md-11 text-left">

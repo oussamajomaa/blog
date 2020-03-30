@@ -21,9 +21,9 @@ if ($_SESSION) {
 
                     <thead class="table-info ">
                         <tr>
-                            <th class='th_titre '><span class="badge badge-dark"><?= $row->titre; ?></span></th>
-                            <th class="th_titre"><span class="badge badge-dark"><?= $row->nom; ?></span></th>
-                            <th class="th_liste"><a class="allComment badge badge-success" href="#"><i class="fa fa-chevron-down"></i> Liste des Commentaires</a></th>
+                            <th class='th_titre '><?= $row->titre; ?></th>
+                            <th class="th_titre"><?= $row->nom; ?></th>
+                            <th class="th_liste"><a class="allComment badge badge-success" href="#"><i class="fa fa-chevron-down icon"></i> Liste des Commentaires</a></th>
                         </tr>
 
                     </thead>
@@ -32,7 +32,7 @@ if ($_SESSION) {
                                         join article on commentaire.id_article=article.id_article
                                         join categorie on article.id_categorie=categorie.id_categorie
                                         join utilisateur on commentaire.id_utilisateur=utilisateur.id_utilisateur
-                                        where commentaire.id_article=:id_article');
+                                        where commentaire.id_article=:id_article order by date_comm desc');
                     insertChamps($sq, ':id_article', $row->id_article);
                     $sq->execute();
                     $re = $sq->fetchAll(PDO::FETCH_OBJ);
@@ -47,7 +47,7 @@ if ($_SESSION) {
                                         <div class="col-12  col-md-1 text-left">
                                             <p class="badge badge-dark"><?= $ro->pseudo; ?></p>
                                             <div>
-                                                <img style="width: 50px" src="<?= user . $ro->photo_utilisateur; ?>" alt="">
+                                                <img style="width: 50px; height:50px" class="rounded-circle" src="<?= user . $ro->photo_utilisateur; ?>" alt="">
                                             </div>
                                         </div>
                                         <div class="col-12  col-md-11 text-left">
@@ -83,8 +83,15 @@ if ($_SESSION) {
     for (let i = 0; i < allComment.length; i++) {
 
         allComment[i].addEventListener('click', () => {
-            allComment[i].re
             let tr = allComment[i].parentElement.parentElement.parentElement.parentElement.querySelectorAll('.tr');
+            let icon = allComment[i].querySelector('.icon');
+            if ((icon.getAttribute('class')) == 'fa fa-chevron-up icon') {
+                icon.setAttribute('class', 'fa fa-chevron-down icon')
+            } else {
+                icon.setAttribute('class', 'fa fa-chevron-up icon')
+            }
+
+            console.log(icon)
             console.log(tr)
             $(tr).toggle('100');
         })

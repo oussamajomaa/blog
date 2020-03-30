@@ -5,7 +5,7 @@ $sql->execute();
 $res = $sql->fetchAll(PDO::FETCH_OBJ);
 ?>
 <div class="container">
-    <h1>PAGES des ARTICLES</h1>
+    
     <div class="row">
         <?php foreach ($res as $row) {
         ?>
